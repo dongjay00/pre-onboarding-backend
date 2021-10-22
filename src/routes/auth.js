@@ -2,27 +2,13 @@ const router = require("express").Router();
 const models = require("../models");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
-
-// 양식 검토 함수
-const validation = (form, kind, res) => {
-  const validationErrors = {};
-  if (form === undefined || form === "" || form === null) {
-    validationErrors[kind] = `${kind} is required!`;
-  }
-
-  if (Object.keys(validationErrors).length > 0) {
-    res.status(422).json({
-      result: "failed",
-      data: validationErrors,
-    });
-  }
-};
+const { validation } = require("../functions/validation");
 
 // 회원가입
 router.post("/register", async (req, res) => {
-  validation(req.body.username, "username", res);
-  validation(req.body.email, "email", res);
-  validation(req.body.password, "password", res);
+  if (validation(req.body.username, "username", res)) return;
+  if (validation(req.body.email, "email", res)) return;
+  if (validation(req.body.password, "password", res)) return;
 
   try {
     const newUser = await models.Users.create({
@@ -33,16 +19,16 @@ router.post("/register", async (req, res) => {
         process.env.AES_SECRET_KEY
       ).toString(),
     });
-    res.status(201).json(newUser);
+    res.status(201).json({ newUser, message: "Success!" });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).json({ err, message: "Bad request!" });
   }
 });
 
 // 로그인
 router.post("/login", async (req, res) => {
-  validation(req.body.username, "username", res);
-  validation(req.body.password, "password", res);
+  if (validation(req.body.username, "username", res)) return;
+  if (validation(req.body.password, "password", res)) return;
 
   try {
     const user = await models.Users.findOne({
@@ -51,7 +37,9 @@ router.post("/login", async (req, res) => {
       },
     });
     !user &&
-      res.status(401).json(`There is no user named ${req.body.username}`);
+      res
+        .status(401)
+        .json({ message: `There is no user named ${req.body.username}` });
 
     const hashedPassword = CryptoJS.AES.decrypt(
       user.password,
@@ -60,7 +48,7 @@ router.post("/login", async (req, res) => {
     const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
     originalPassword !== req.body.password &&
-      res.status(401).json("Password is wrong!");
+      res.status(401).json({ message: "Password is wrong!" });
 
     const accessToken = jwt.sign(
       {
@@ -70,9 +58,9 @@ router.post("/login", async (req, res) => {
       { expiresIn: "3d" }
     );
 
-    res.status(200).json({ user, accessToken });
+    res.status(200).json({ user, accessToken, message: "Success!" });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).json({ err, message: "Bad request!" });
   }
 });
 

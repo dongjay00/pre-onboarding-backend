@@ -7,7 +7,6 @@ const morgan = require("morgan");
 const sqlite3 = require("sqlite3").verbose();
 const articleRoute = require("./routes/articles");
 const authRoute = require("./routes/auth");
-const userRoute = require("./routes/users");
 const models = require("./models");
 
 dotenv.config();
@@ -28,7 +27,6 @@ models.sequelize
 
 app.use("/api/articles", articleRoute);
 app.use("/api/auth", authRoute);
-app.use("/api/users", userRoute);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log("Server is running!");
