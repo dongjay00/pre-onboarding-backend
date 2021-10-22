@@ -23,10 +23,7 @@ fs.readdirSync(__dirname)
     return file.indexOf(".") !== 0 && file !== "index.js";
   })
   .forEach((file) => {
-    const model = require(path.join(__dirname, "models", file)).default(
-      sequelize,
-      Sequelize
-    );
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize);
     db[model.name] = model;
   });
 
