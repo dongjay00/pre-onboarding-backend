@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
-  const Article = sequelize.define(
-    "Article",
+  const Articles = sequelize.define(
+    "Articles",
     {
-      aricle_id: {
+      id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         unique: true,
@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     { timestamps: false }
   );
 
-  Article.associate = (models) => {
-    Article.belongsTo(models.User);
+  Articles.associate = (models) => {
+    Articles.belongsTo(models.Users);
   };
-  return Article;
+  return Articles;
 };
