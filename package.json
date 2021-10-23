@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/bin/www.js",
     "start:dev": "nodemon --watch src/ src/bin/www.js",
-    "test": "mocha"
+    "test": "mocha",
+    "test:watch": "mocha --watch"
   },
   "keywords": [],
   "author": "Donghoon Lee",
