@@ -11,17 +11,10 @@ const testuser = {
 
 // 회원가입 테스트
 describe("POST /api/auth/register", () => {
-  const firstUser = {
-    username: "first",
-    email: "first@gmail.com",
-    password: "first1234",
-  };
   before(() => models.sequelize.sync());
   before(() => {
-    models.Users.destroy({ where: { username: "first" } });
     models.Users.destroy({ where: { username: "testuser" } });
   });
-  before(() => models.Users.create(firstUser));
 
   describe("If success", () => {
     let newUser;
@@ -46,16 +39,24 @@ describe("POST /api/auth/register", () => {
   });
 
   describe("If failed", () => {
-    it("Return 422 if username missed", (done) => {
-      request(app).post("/api/auth/register").send({}).expect(422).end(done);
+    it("Return 422 if username or email or password missed", (done) => {
+      request(app)
+        .post("/api/auth/register")
+        .send({
+          username: "",
+          email: "testuser@naver.com",
+          password: "test1234",
+        })
+        .expect(422)
+        .end(done);
     });
     it("Return 400 if username duplicated", (done) => {
       request(app)
         .post("/api/auth/register")
         .send({
-          username: "first",
-          email: "first@naver.com",
-          password: "first1234",
+          username: "testuser",
+          email: "testuser@naver.com",
+          password: "test1234",
         })
         .expect(400)
         .end(done);
@@ -68,6 +69,7 @@ describe("POST /api/auth/login", () => {
   before(() => models.sequelize.sync());
 
   const { username, password } = testuser;
+  let body;
 
   describe("If success", () => {
     before((done) => {
@@ -90,7 +92,7 @@ describe("POST /api/auth/login", () => {
   });
 
   describe("If failed", () => {
-    it("Return 422 if username missed", (done) => {
+    it("Return 422 if username or password missed", (done) => {
       request(app).post("/api/auth/login").send({}).expect(422).end(done);
     });
     it("Return 401 if insert wrong password", (done) => {

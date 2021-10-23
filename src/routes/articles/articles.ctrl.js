@@ -61,9 +61,10 @@ const editArticle = async (req, res) => {
       {
         title: req.body.title,
         content: req.body.content,
+        UserId: req.user.id,
       },
       {
-        where: { id: req.user.id },
+        where: { id: req.params.id },
       }
     );
     res.status(200).json({ updatedArticle, message: "Success!" });

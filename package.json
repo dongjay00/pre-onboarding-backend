@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node src/bin/www.js",
     "start:dev": "nodemon --watch src/ src/bin/www.js",
-    "test": "mocha",
-    "test:watch": "mocha --watch"
+    "test": "mocha test/auth.spec.js test/articles.spec.js --timeout 10000",
+    "test:watch": "mocha test/auth.spec.js test/articles.spec.js --watch --timeout 10000"
   },
   "keywords": [],
   "author": "Donghoon Lee",
