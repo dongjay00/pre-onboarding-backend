@@ -1,11 +1,10 @@
-const router = require("express").Router();
-const models = require("../models");
+const models = require("../../models");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
-const { validation } = require("../functions/validation");
+const { validation } = require("../../functions/validation");
 
 // 회원가입
-router.post("/register", async (req, res) => {
+const register = async (req, res) => {
   if (validation(req.body.username, "username", res)) return;
   if (validation(req.body.email, "email", res)) return;
   if (validation(req.body.password, "password", res)) return;
@@ -23,10 +22,10 @@ router.post("/register", async (req, res) => {
   } catch (err) {
     res.status(400).json({ err, message: "Bad request!" });
   }
-});
+};
 
 // 로그인
-router.post("/login", async (req, res) => {
+const login = async (req, res) => {
   if (validation(req.body.username, "username", res)) return;
   if (validation(req.body.password, "password", res)) return;
 
@@ -62,6 +61,6 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     res.status(400).json({ err, message: "Bad request!" });
   }
-});
+};
 
-module.exports = router;
+module.exports = { register, login };

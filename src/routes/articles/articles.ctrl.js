@@ -1,10 +1,8 @@
-const router = require("express").Router();
-const models = require("../models");
-const { verifyToken, verifyTokenAndAuthorization } = require("./verifyToken");
-const { validation } = require("../functions/validation");
+const models = require("../../models");
+const { validation } = require("../../functions/validation");
 
 // 글 작성
-router.post("/", verifyToken, async (req, res) => {
+const createArticle = async (req, res) => {
   if (validation(req.body.title, "title", res)) return;
   if (validation(req.body.content, "content", res)) return;
 
@@ -18,10 +16,10 @@ router.post("/", verifyToken, async (req, res) => {
   } catch (err) {
     res.status(400).json({ err, message: "Bad request!" });
   }
-});
+};
 
-// 글 목록 확인 (pagination의 경우, 한 페이지 당 5개의 글을 가져오도록 설정)
-router.get("/", async (req, res) => {
+// 글 목록 확인 (pagination의 경우, 한 페이지 당 'limit'개의 글을 가져오도록 설정)
+const getArticles = async (req, res) => {
   const page = req.query.page;
   const limit = 5;
   let offset = 0;
@@ -37,22 +35,24 @@ router.get("/", async (req, res) => {
   } catch (err) {
     res.status(400).json({ err, message: "Bad request!" });
   }
-});
+};
 
 // 글 확인
-router.get("/:id", async (req, res) => {
+const showArticle = async (req, res) => {
   try {
     const article = await models.Articles.findOne({
       where: { id: req.params.id },
     });
-    res.status(200).json({ article, message: "Success!" });
+    article === null
+      ? res.status(404).json({ message: "Article Not Found!" })
+      : res.status(200).json({ article, message: "Success!" });
   } catch (err) {
-    res.status(404).json({ message: "Article Not Found!" });
+    res.status(400).json({ err, message: "Bad request!" });
   }
-});
+};
 
 // 글 수정
-router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
+const editArticle = async (req, res) => {
   if (validation(req.body.title, "title", res)) return;
   if (validation(req.body.content, "content", res)) return;
 
@@ -70,10 +70,10 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
   } catch (err) {
     res.status(400).json({ err, message: "Bad request!" });
   }
-});
+};
 
 // 글 삭제
-router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
+const deleteArticle = async (req, res) => {
   const article = await models.Articles.findOne({
     where: { id: req.params.id },
   });
@@ -88,6 +88,12 @@ router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
   } catch (err) {
     res.status(400).json({ err, message: "Bad request!" });
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  createArticle,
+  getArticles,
+  showArticle,
+  editArticle,
+  deleteArticle,
+};
