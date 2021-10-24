@@ -2,9 +2,6 @@ const request = require("supertest");
 const should = require("should");
 const app = require("../src");
 const models = require("../src/models");
-const dotenv = require("dotenv");
-
-dotenv.config();
 
 let testToken, testUserId, testArticleId;
 
@@ -29,16 +26,13 @@ describe("Get testToken", () => {
 });
 
 const testArticle = {
-  title: process.env.TEST_TITLE,
+  title: "test article",
   content: "This is test article",
 };
 
 // 글 작성 테스트
 describe("POST /api/articles", () => {
   before(() => models.sequelize.sync());
-  // before(() => {
-  //   models.Users.destroy({ where: { title: process.env.TEST_TITLE } });
-  // });
 
   describe("If success", () => {
     let newArticle;

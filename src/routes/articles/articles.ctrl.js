@@ -29,9 +29,9 @@ const getArticles = async (req, res) => {
     const articles = page
       ? await models.Articles.findAll({ offset, limit })
       : await models.Articles.findAll();
-    articles.length !== 0
-      ? res.status(200).json({ articles, message: "Success!" })
-      : res.status(404).json({ message: "Page Not Found!" });
+    page && articles.length === 0
+      ? res.status(404).json({ message: "Page Not Found!" })
+      : res.status(200).json({ articles, message: "Success!" });
   } catch (err) {
     res.status(400).json({ err, message: "Bad request!" });
   }

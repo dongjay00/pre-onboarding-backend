@@ -10,7 +10,7 @@ const register = async (req, res) => {
   if (validation(req.body.password, "password", res)) return;
 
   try {
-    const newUser = await models.Users.create({
+    const _newUser = await models.Users.create({
       username: req.body.username,
       email: req.body.email,
       password: CryptoJS.AES.encrypt(
@@ -18,6 +18,9 @@ const register = async (req, res) => {
         process.env.AES_SECRET_KEY
       ).toString(),
     });
+
+    const { password, ...newUser } = _newUser.dataValues;
+
     res.status(201).json({ newUser, message: "Success!" });
   } catch (err) {
     res.status(400).json({ err, message: "Bad request!" });
@@ -30,18 +33,18 @@ const login = async (req, res) => {
   if (validation(req.body.password, "password", res)) return;
 
   try {
-    const user = await models.Users.findOne({
+    const _user = await models.Users.findOne({
       where: {
         username: req.body.username,
       },
     });
-    !user &&
+    !_user &&
       res
         .status(401)
         .json({ message: `There is no user named ${req.body.username}` });
 
     const hashedPassword = CryptoJS.AES.decrypt(
-      user.password,
+      _user.password,
       process.env.AES_SECRET_KEY
     );
     const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
@@ -51,11 +54,13 @@ const login = async (req, res) => {
 
     const accessToken = jwt.sign(
       {
-        id: user.id,
+        id: _user.id,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "3d" }
     );
+
+    const { password, ...user } = _user.dataValues;
 
     res.status(200).json({ user, accessToken, message: "Success!" });
   } catch (err) {
