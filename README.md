@@ -105,7 +105,7 @@
 
 - **회원가입**
 
-  ```json
+  ```sh
   // request
   - URL
   post("/api/auth/register")
@@ -118,7 +118,7 @@
   }
   ```
 
-  ```json
+  ```sh
   // 성공 response (201)
   {
       "newUser": {
@@ -130,7 +130,7 @@
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 1 (400)
   {
       "err": {
@@ -141,7 +141,7 @@
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 2 (422)
   {
       "result": "failed",
@@ -155,7 +155,7 @@
 
 - **로그인**
 
-  ```json
+  ```sh
   // request
   - URL
   post("/api/auth/login")
@@ -167,7 +167,7 @@
   }
   ```
 
-  ```json
+  ```sh
   // 성공 response (200)
   {
       "user": {
@@ -180,21 +180,21 @@
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 1 (401)
   {
       "message": "There is no user named {유저명}"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 2 (401)
   {
       "message": "Password is wrong!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 3 (400)
   {
       "err": {
@@ -210,7 +210,7 @@
 
 - **글 작성**
 
-  ```json
+  ```sh
   // request
   - URL
   post("/api/articles")
@@ -227,7 +227,7 @@
   }
   ```
 
-  ```json
+  ```sh
   // 성공 response (200)
   {
       "newArticle": {
@@ -240,7 +240,7 @@
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 1 (422)
   {
       "result": "failed",
@@ -250,21 +250,21 @@
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 2 (403)
   {
       "message": "Token is not valid!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 3 (401)
   {
       "message": "You are not authenticated!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 4 (400)
   {
       "err": {
@@ -278,7 +278,7 @@
 
 - **글 목록 확인** - page를 옵션으로 추가할 수 있다
 
-  ```json
+  ```sh
   // request
   - URL
   get("/api/articles")
@@ -287,7 +287,7 @@
   '?page={페이지 number}'
   ```
 
-  ```json
+  ```sh
   // 성공 response (200) - page 옵션을 추가한 경우, 해당 page의 글들만 배열 속에 반환된다.
   {
       "articles": [
@@ -303,14 +303,14 @@
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 1 (404) - page 옵션을 주었을 때만 나타나는 response이다.
   {
       "message": "Page Not Found!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 2 (400)
   {
       "err": {
@@ -324,13 +324,13 @@
 
 - **글 확인**
 
-  ```json
+  ```sh
   // request
   - URL
   get("/api/articles/{정수 id값(게시글)}")
   ```
 
-  ```json
+  ```sh
   // 성공 response (200)
   {
       "article": {
@@ -343,14 +343,14 @@
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 1 (404)
   {
       "message": "Article Not Found!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 2 (400)
   {
       "err": {
@@ -364,7 +364,7 @@
 
 - **글 수정**
 
-  ```json
+  ```sh
   // request
   - URL
   put("/api/articles/{정수 id값(게시글)}")
@@ -382,7 +382,7 @@
   }
   ```
 
-  ```json
+  ```sh
   // 성공 response (200)
   {
       "updatedArticle": [
@@ -392,7 +392,7 @@
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 1 (422)
   {
       "result": "failed",
@@ -402,28 +402,28 @@
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 2 (403)
   {
       "message": "Token is not valid!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 3 (401)
   {
       "message": "You are not authenticated!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 4 (403)
   {
       "message": "You are not allowed to do that!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 5 (400)
   {
       "err": {
@@ -437,7 +437,7 @@
 
 - **글 삭제**
 
-  ```json
+  ```sh
   // request
   - URL
   delete("/api/articles/{정수 id값(게시글)}")
@@ -453,7 +453,7 @@
   }
   ```
 
-  ```json
+  ```sh
   // 성공 response (200)
   {
       "id": 정수 id값(게시글),
@@ -461,35 +461,35 @@
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 1 (404)
   {
       "message": "Article Not Found!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 2 (403)
   {
       "message": "Token is not valid!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 3 (401)
   {
       "message": "You are not authenticated!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 4 (403)
   {
       "message": "You are not allowed to do that!"
   }
   ```
 
-  ```json
+  ```sh
   // 실패 response 5 (400)
   {
       "err": {
