@@ -99,6 +99,8 @@
 
 ## Api 명세
 
+> POST와 PUT의 `Content-Type`은 `application/json`
+
 ### Auth api
 
 - **회원가입**
